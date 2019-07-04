@@ -17,6 +17,15 @@ class IndexController extends Controller
      */
     public function index()
     {
-        $this->View->render('index/index');
+        if (Session::get("user_account_type") == 7){
+            $this->View->render('admin/index', array(
+                'instituciones' => InstitucionModel::getAllInstituciones(),
+                'usuarios' => UserModel::getPublicProfilesOfAllUsers()
+            ));
+        }
+        else{
+            $this->View->render('index/index');
+        }
+        
     }
 }

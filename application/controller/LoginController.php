@@ -52,7 +52,7 @@ class LoginController extends Controller
             if (Request::post('redirect')) {
                 Redirect::toPreviousViewedPageAfterLogin(ltrim(urldecode(Request::post('redirect')), '/'));
             } else {
-                Redirect::to('user/index');
+                Redirect::home();
             }
         } else {
             if (Request::post('redirect')) {

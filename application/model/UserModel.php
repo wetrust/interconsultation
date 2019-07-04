@@ -23,6 +23,7 @@ class UserModel
         $query = $database->prepare($sql);
         $query->execute();
 
+        return $query->fetchAll();
         $all_users_profiles = array();
 
         foreach ($query->fetchAll() as $user) {

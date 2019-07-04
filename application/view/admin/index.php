@@ -1,51 +1,98 @@
 <div class="container">
-    <h1>Admin/index</h1>
-    <!-- echo out the system feedback (error and success messages) -->
+    <h1>Administración de plataforma</h1>
     <?php $this->renderFeedbackMessages(); ?>
-    <h3>What happens here ?</h3>
-    <div class="alert alert-info" role="alert">
-        This controller/action/view shows a list of all users in the system. with the ability to soft delete a user
-        or suspend a user.
-    </div>
-    <table class="table table-bordered">
-        <thead class="thead-dark">
-            <tr>
-                <th>Id</th>
-                <th>Avatar</th>
-                <th>Username</th>
-                <th>User's email</th>
-                <th>Activated ?</th>
-                <th>Link to user's profile</th>
-                <th>suspension Time in days</th>
-                <th>Soft delete</th>
-                <th>Submit</th>
-            </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($this->users as $user) { ?>
-            <tr>
-                <td><?= $user->user_id; ?></td>
-                <td class="avatar">
-                <?php if (isset($user->user_avatar_link)) { ?>
-                    <img src="<?= $user->user_avatar_link; ?>"/>
-                <?php } ?>
-                </td>
-                <td><?= $user->user_name; ?></td>
-                <td><?= $user->user_email; ?></td>
-                <td><?= ($user->user_active == 0 ? 'No' : 'Yes'); ?></td>
-                <td>
-                    <a href="<?= Config::get('URL') . 'profile/showProfile/' . $user->user_id; ?>">Profile</a>
-                </td>
-                <form action="<?= config::get("URL"); ?>admin/actionAccountSettings" method="post">
-                    <td><input class="form-control" type="number" name="suspension" /></td>
-                    <td><input type="checkbox" name="softDelete" <?php if ($user->user_deleted) { ?> checked <?php } ?> /></td>
-                    <td>
-                        <input type="hidden" name="user_id" value="<?= $user->user_id; ?>" />
-                        <button type="submit" class="btn btn-primary">Apply</button>
-                    </td>
-                </form>
-            </tr>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-instituciones-tab" data-toggle="tab" href="#nav-instituciones" role="tab" aria-controls="nav-instituciones" aria-selected="true">Instituciones</a>
+            <a class="nav-item nav-link" id="nav-usuarios-tab" data-toggle="tab" href="#nav-usuarios" role="tab" aria-controls="nav-usuarios" aria-selected="false">Usuarios</a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-instituciones" role="tabpanel" aria-labelledby="nav-instituciones-tab">
+            <div class="d-flex justify-content-between mt-3">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="<?= Config::get('URL') . 'admin/instituciones/new' ?>">Nueva Institucion</a>
+                    </li>
+                </ul>
+                <div class="form-inline">
+                    <label class="mr-1"><i class="fa fa-search" aria-hidden="true"></i></label>
+                    <input class="form-control" id="busqueda" type="text" placeholder="Buscar..">
+                </div>
+            </div>
+        <?php if ($this->instituciones) { ?>
+            <table class="table table-bordered mt-2">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nombre institucion</th>
+                        <th>Jefe</th>
+                        <th>Ver</th>
+                    </tr>
+                </thead>
+                <tbody id="tableInstituciones">
+                    <?php foreach($this->instituciones as $key => $value) { ?>
+                    <tr>
+                        <td><?= htmlentities($value->institucion_text); ?></td>
+                        <td><?= htmlentities($value->user_name); ?></td>
+                        <td><a href="<?= Config::get('URL') . 'admin/instituciones/view/' . $value->institucion_id; ?>">Ver</a></td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        <?php } else { ?>
+            <div class="alert alert-info mt-2" role="alert">No tiene instituciones. ¡Crea una!</div>
         <?php } ?>
-        </tbody>
-    </table>
+        </div>
+        <div class="tab-pane fade" id="nav-usuarios" role="tabpanel" aria-labelledby="nav-usuarios-tab">
+            <div class="d-flex justify-content-between mt-3">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Nuevo Usuario</a>
+                    </li>
+                </ul>
+                <div class="form-inline">
+                    <label class="mr-1"><i class="fa fa-search" aria-hidden="true"></i></label>
+                    <input class="form-control" id="busquedaUsuarios" type="text" placeholder="Buscar..">
+                </div>
+            </div>
+        <?php if ($this->usuarios) { ?>
+            <table class="table table-bordered mt-2">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Ver</th>
+                    </tr>
+                </thead>
+                <tbody id="tableUsuarios">
+                    <?php foreach($this->usuarios as $key => $value) { ?>
+                    <tr>
+                        <td><?= htmlentities($value->user_name); ?></td>
+                        <td><?= htmlentities($value->user_email); ?></td>
+                        <td><a href="#">Ver</a></td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        <?php } else { ?>
+            <div class="alert alert-info mt-2" role="alert">No tiene instituciones. ¡Crea una!</div>
+        <?php } ?>
+        </div>
+    </div>
 </div>
+<script>
+$(document).ready(function(){
+  $("#busqueda").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#tableInstituciones tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+  $("#busquedaUsuarios").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#tableUsuarios tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
