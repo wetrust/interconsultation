@@ -39,6 +39,18 @@ class InstitucionModel
         return $query->fetch();
     }
 
+    public static function getInstitucionUser($user_id)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT instituciones.user_id, instituciones.institucion_id FROM instituciones WHERE user_id = :user_id LIMIT 1";
+        $query = $database->prepare($sql);
+        $query->execute(array(':user_id' => $user_id));
+
+        // fetch() is the PDO method that gets a single result
+        return $query->fetch();
+    }
+
     /**
      * Set a institucion (create a new one)
      * @param string $institucion_text institucion text that will be created

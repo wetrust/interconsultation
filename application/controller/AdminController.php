@@ -70,14 +70,12 @@ class AdminController extends Controller
                 break;
             case "create":
                 $registration_successful = RegistrationModel::registerNewUserInternal();
-
                 if ($registration_successful) {
                     Redirect::Home();
                     
                 } else {
                     Redirect::to('admin/usuarios/new');
                 }
-
                 break;
             case "delete":
                 UserModel::removeUser($user_id);

@@ -40,7 +40,6 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarUser">
                                 <a class="dropdown-item" href="<?php echo Config::get('URL'); ?>user/index">My Account</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="<?php echo Config::get('URL'); ?>user/changeUserRole">Change account type</a>
                                 <a class="dropdown-item" href="<?php echo Config::get('URL'); ?>user/editAvatar">Edit your avatar</a>
                                 <a class="dropdown-item" href="<?php echo Config::get('URL'); ?>user/editusername">Edit my username</a>
                                 <a class="dropdown-item" href="<?php echo Config::get('URL'); ?>user/edituseremail">Edit my email</a>
