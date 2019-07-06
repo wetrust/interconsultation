@@ -79,6 +79,73 @@ class RegistrationModel
         return false;
     }
 
+    public static function registerNewUserInternal()
+    {
+        // clean the input
+        $user_name = strip_tags(Request::post('user_name'));
+        $user_email = strip_tags(Request::post('user_email'));
+        $user_email_repeat = strip_tags(Request::post('user_email_repeat'));
+        $user_password_new = Request::post('user_password_new');
+        $user_password_repeat = Request::post('user_password_repeat');
+        $rol = Request::post('user_rol');
+
+        // stop registration flow if registrationInputValidation() returns false (= anything breaks the input check rules)
+        $validation_result = self::registrationInputValidationInternal($user_name, $user_password_new, $user_password_repeat, $user_email, $user_email_repeat);
+        if (!$validation_result) {
+            return false;
+        }
+
+        // crypt the password with the PHP 5.5's password_hash() function, results in a 60 character hash string.
+        // @see php.net/manual/en/function.password-hash.php for more, especially for potential options
+        $user_password_hash = password_hash($user_password_new, PASSWORD_DEFAULT);
+
+        // make return a bool variable, so both errors can come up at once if needed
+        $return = true;
+
+        // check if username already exists
+        if (UserModel::doesUsernameAlreadyExist($user_name)) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_USERNAME_ALREADY_TAKEN'));
+            $return = false;
+        }
+
+        // check if email already exists
+        if (UserModel::doesEmailAlreadyExist($user_email)) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_USER_EMAIL_ALREADY_TAKEN'));
+            $return = false;
+        }
+
+        // if Username or Email were false, return false
+        if (!$return) return false;
+
+        // generate random hash for email verification (40 char string)
+        $user_activation_hash = sha1(uniqid(mt_rand(), true));
+
+        // write user data to database
+        if (!self::writeNewUserToDatabaseInternal($user_name, $user_password_hash, $user_email, time(), $user_activation_hash, $rol)) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_ACCOUNT_CREATION_FAILED'));
+            return false; // no reason not to return false here
+        }
+
+        // get user_id of the user that has been created, to keep things clean we DON'T use lastInsertId() here
+        $user_id = UserModel::getUserIdByUsername($user_name);
+
+        if (!$user_id) {
+            Session::add('feedback_negative', Text::get('FEEDBACK_UNKNOWN_ERROR'));
+            return false;
+        }
+
+        // send verification email
+        if (self::sendVerificationEmail($user_id, $user_email, $user_activation_hash)) {
+            Session::add('feedback_positive', Text::get('FEEDBACK_ACCOUNT_SUCCESSFULLY_CREATED'));
+            return true;
+        }
+
+        // if verification email sending failed: instantly delete the user
+        self::rollbackRegistrationByUserId($user_id);
+        Session::add('feedback_negative', Text::get('FEEDBACK_VERIFICATION_MAIL_SENDING_FAILED'));
+        return false;
+    }
+
     /**
      * Validates the registration input
      *
@@ -100,6 +167,19 @@ class RegistrationModel
             Session::add('feedback_negative', Text::get('FEEDBACK_CAPTCHA_WRONG'));
             $return = false;
         }
+
+        // if username, email and password are all correctly validated, but make sure they all run on first sumbit
+        if (self::validateUserName($user_name) AND self::validateUserEmail($user_email, $user_email_repeat) AND self::validateUserPassword($user_password_new, $user_password_repeat) AND $return) {
+            return true;
+        }
+
+        // otherwise, return false
+        return false;
+    }
+
+    public static function registrationInputValidationInternal($user_name, $user_password_new, $user_password_repeat, $user_email, $user_email_repeat)
+    {
+        $return = true;
 
         // if username, email and password are all correctly validated, but make sure they all run on first sumbit
         if (self::validateUserName($user_name) AND self::validateUserEmail($user_email, $user_email_repeat) AND self::validateUserPassword($user_password_new, $user_password_repeat) AND $return) {
@@ -222,6 +302,28 @@ class RegistrationModel
         return false;
     }
 
+    public static function writeNewUserToDatabaseInternal($user_name, $user_password_hash, $user_email, $user_creation_timestamp, $user_activation_hash, $rol)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        // write new users data into database
+        $sql = "INSERT INTO users (user_name, user_password_hash, user_email, user_creation_timestamp, user_activation_hash, user_provider_type, user_account_type)
+                    VALUES (:user_name, :user_password_hash, :user_email, :user_creation_timestamp, :user_activation_hash, :user_provider_type, :user_account_type)";
+        $query = $database->prepare($sql);
+        $query->execute(array(':user_name' => $user_name,
+                              ':user_password_hash' => $user_password_hash,
+                              ':user_email' => $user_email,
+                              ':user_creation_timestamp' => $user_creation_timestamp,
+                              ':user_activation_hash' => $user_activation_hash,
+                              ':user_provider_type' => 'DEFAULT',
+                              ':user_account_type' => $rol));
+        $count =  $query->rowCount();
+        if ($count == 1) {
+            return true;
+        }
+
+        return false;
+    }
     /**
      * Deletes the user from users table. Currently used to rollback a registration when verification mail sending
      * was not successful.

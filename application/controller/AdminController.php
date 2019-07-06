@@ -63,6 +63,22 @@ class AdminController extends Controller
     public function usuarios($accion = null, $user_id = null)
     {
         switch ($accion){
+            case "new":
+                $this->View->render('admin/usuarios/new', array(
+                    'roles' => RolesModel::getAllRoles()
+                ));
+                break;
+            case "create":
+                $registration_successful = RegistrationModel::registerNewUserInternal();
+
+                if ($registration_successful) {
+                    Redirect::Home();
+                    
+                } else {
+                    Redirect::to('admin/usuarios/new');
+                }
+
+                break;
             case "delete":
                 UserModel::removeUser($user_id);
                 Redirect::to("admin/instituciones/view/".Request::post("institucion_id"));

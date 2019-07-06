@@ -47,7 +47,7 @@
             <div class="d-flex justify-content-between mt-3">
                 <ul class="nav nav-pills">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Nuevo Usuario</a>
+                        <a class="nav-link active" href="<?= Config::get('URL') . 'admin/usuarios/new' ?>">Nuevo Usuario</a>
                     </li>
                 </ul>
                 <div class="form-inline">
