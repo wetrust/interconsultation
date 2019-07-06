@@ -12,7 +12,7 @@
                     <label>Jefe:</label>
                     <input disabled type="text" class="form-control" value="<?php echo htmlentities($this->institucion->user_name); ?>">
                 </div>
-                <div class="form-group col-2">
+                <div class="form-group col-2 my-4">
                     <a class="btn btn-danger" href="<?= Config::get('URL') . 'admin/instituciones/delete/' . htmlentities($this->institucion->institucion_id); ?>">Eliminar institución</a>
                 </div>
             </div>
