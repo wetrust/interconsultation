@@ -51,6 +51,22 @@ class AdminController extends Controller
                 InstitucionModel::addUser(Request::post("institucion_id"), Request::post("user_id"));
                 Redirect::to("admin/instituciones/view/".Request::post("institucion_id"));
                 break;
+            case "remove":
+                InstitucionModel::removeUser(Request::post("institucion_id"), Request::post("user_id"));
+                Redirect::to("admin/instituciones/view/".Request::post("institucion_id"));
+                break;
+            default:
+                Redirect::home();
+        }
+    }
+
+    public function usuarios($accion = null, $user_id = null)
+    {
+        switch ($accion){
+            case "delete":
+                UserModel::removeUser($user_id);
+                Redirect::to("admin/instituciones/view/".Request::post("institucion_id"));
+                break;
             default:
                 Redirect::home();
         }

@@ -32,15 +32,15 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Correo</th>
-                        <th>Ver</th>
+                        <th>Opciones</th>
                     </tr>
                 </thead>
-                <tbody id="tableInstituciones">
+                <tbody id="tableUsuarios">
                     <?php foreach($this->usuarios_institucionales as $key => $value) { ?>
                     <tr>
                         <td><?= htmlentities($value->user_name); ?></td>
                         <td><?= htmlentities($value->user_email); ?></td>
-                        <td><a href="#">Ver</a></td>
+                        <td><button class="btn btn-danger descartar" data-user="<?= htmlentities($value->user_id); ?>">Desvincular</a></td>
                     </tr>
                     <?php } ?>
                 </tbody>
@@ -49,3 +49,24 @@
             <div class="alert alert-info mt-2" role="alert">No tiene usuarios institucionales.</div>
         <?php } ?>
 </div>
+<script>
+$(document).ready(function(){
+  $("#busqueda").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#tableUsuarios tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+
+  $(".descartar").on("click", function() {
+    var value = {
+        institucion_id: <?php echo htmlentities($this->institucion->institucion_id); ?>,
+        user_id: $(this).data("user")
+    };
+
+    $.post("/admin/instituciones/remove", value).done(function(){
+        location.reload();
+    });
+  });
+});
+</script>

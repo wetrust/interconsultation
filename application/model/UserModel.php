@@ -19,7 +19,7 @@ class UserModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "SELECT user_id, user_name, user_email, user_active, user_has_avatar, user_deleted FROM users";
+        $sql = "SELECT user_id, user_name, user_email, user_active, user_has_avatar, user_deleted, users.user_account_type, roles.rol_name FROM users INNER JOIN roles ON users.user_account_type = roles.rol_id";
         $query = $database->prepare($sql);
         $query->execute();
 
@@ -340,5 +340,26 @@ class UserModel
 
         // return one row (we only have one result or nothing)
         return $query->fetch();
+    }
+
+    public static function removeUser($user_id)
+    {
+        if (!$user_id) {
+            return false;
+        }
+
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "DELETE FROM users WHERE user_id = :user_id LIMIT 1";
+        $query = $database->prepare($sql);
+        $query->execute(array(':user_id' => $user_id));
+
+        if ($query->rowCount() == 1) {
+            return true;
+        }
+
+        // default return
+        Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_DELETION_FAILED'));
+        return false;
     }
 }

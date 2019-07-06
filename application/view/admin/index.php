@@ -61,6 +61,7 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Correo</th>
+                        <th>Rol</th>
                         <th>Ver</th>
                     </tr>
                 </thead>
@@ -69,7 +70,8 @@
                     <tr>
                         <td><?= htmlentities($value->user_name); ?></td>
                         <td><?= htmlentities($value->user_email); ?></td>
-                        <td><a href="#">Ver</a></td>
+                        <td><?= htmlentities($value->rol_name); ?></td>
+                        <td><button class="btn btn-danger descartar" data-user="<?= htmlentities($value->user_id); ?>">Eliminar Usuario</a></td>
                     </tr>
                     <?php } ?>
                 </tbody>
@@ -92,6 +94,12 @@ $(document).ready(function(){
     var value = $(this).val().toLowerCase();
     $("#tableUsuarios tr").filter(function() {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+
+  $(".descartar").on("click", function() {
+    $.get("/admin/usuarios/delete/" + $(this).data("user")).done(function(){
+        location.reload();
     });
   });
 });

@@ -119,11 +119,6 @@ class InstitucionModel
     }
 
 
-
-
-
-
-
     ////////////////////////////////////
     /////////////////////////////////////
     /////////////////////////////////////
@@ -160,6 +155,27 @@ class InstitucionModel
 
         // default return
         Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_CREATION_FAILED'));
+        return false;
+    }
+
+    public static function removeUser($institucion_id, $user_id)
+    {
+        if (!$institucion_id) {
+            return false;
+        }
+
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "DELETE FROM inst_user WHERE institucion_id = :institucion_id AND user_id = :user_id LIMIT 1";
+        $query = $database->prepare($sql);
+        $query->execute(array(':institucion_id' => $institucion_id,':user_id' => $user_id));
+
+        if ($query->rowCount() == 1) {
+            return true;
+        }
+
+        // default return
+        Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_DELETION_FAILED'));
         return false;
     }
 }
