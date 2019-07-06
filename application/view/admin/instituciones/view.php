@@ -12,6 +12,9 @@
                     <label>Jefe:</label>
                     <input disabled type="text" class="form-control" value="<?php echo htmlentities($this->institucion->user_name); ?>">
                 </div>
+                <div class="form-group col-2">
+                    <a class="btn btn-danger" href="<?= Config::get('URL') . 'admin/instituciones/delete/' . htmlentities($this->institucion->institucion_id); ?>">Eliminar institución</a>
+                </div>
             </div>
         </div>
     </div>
@@ -40,7 +43,7 @@
                     <tr>
                         <td><?= htmlentities($value->user_name); ?></td>
                         <td><?= htmlentities($value->user_email); ?></td>
-                        <td><button class="btn btn-danger descartar" data-user="<?= htmlentities($value->user_id); ?>">Desvincular</a></td>
+                        <td><button class="btn btn-danger descartar" data-user="<?= htmlentities($value->user_id); ?>">Desvincular</button></td>
                     </tr>
                     <?php } ?>
                 </tbody>

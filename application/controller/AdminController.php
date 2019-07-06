@@ -55,6 +55,10 @@ class AdminController extends Controller
                 InstitucionModel::removeUser(Request::post("institucion_id"), Request::post("user_id"));
                 Redirect::to("admin/instituciones/view/".Request::post("institucion_id"));
                 break;
+            case "delete":
+                InstitucionModel::deleteInstitucion($institucion_id);
+                Redirect::home();
+                break;
             default:
                 Redirect::home();
         }

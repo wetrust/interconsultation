@@ -115,6 +115,8 @@ class InstitucionModel
             return false;
         }
 
+        self::removeAllUserInInstitucion($institucion_id);
+
         $database = DatabaseFactory::getFactory()->getConnection();
 
         $sql = "DELETE FROM instituciones WHERE institucion_id = :institucion_id LIMIT 1";
@@ -195,6 +197,27 @@ class InstitucionModel
         $query->execute(array(':institucion_id' => $institucion_id,':user_id' => $user_id));
 
         if ($query->rowCount() == 1) {
+            return true;
+        }
+
+        // default return
+        Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_DELETION_FAILED'));
+        return false;
+    }
+
+    public static function removeAllUserInInstitucion($institucion_id)
+    {
+        if (!$institucion_id) {
+            return false;
+        }
+
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "DELETE FROM inst_user WHERE institucion_id = :institucion_id";
+        $query = $database->prepare($sql);
+        $query->execute(array(':institucion_id' => $institucion_id));
+
+        if ($query->rowCount() > 0) {
             return true;
         }
 
