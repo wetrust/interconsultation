@@ -45,6 +45,18 @@ class UserModel
         return $all_users_profiles;
     }
 
+
+    public static function getAllUsersForInstitucion($institucion_id)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT users.user_id, users.user_name, roles.rol_name FROM users INNER JOIN roles ON users.user_account_type = roles.rol_id WHERE users.user_active = 1 AND users.user_deleted = 0 AND users.user_account_type IN (2,3) AND users.user_id NOT IN (SELECT inst_user.user_id FROM inst_user WHERE inst_user.institucion_id = :institucion_id)";
+        $query = $database->prepare($sql);
+        $query->execute(array('institucion_id' => $institucion_id));
+
+        return $query->fetchAll();
+    }
+
     /**
      * Gets a user's profile data, according to the given $user_id
      * @param int $user_id The user's id

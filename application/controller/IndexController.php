@@ -54,7 +54,7 @@ class IndexController extends Controller
                     
         $this->View->render('index/usuarios/add', array(
             'institucion' => InstitucionModel::getInstitucion($institucion->institucion_id),
-            'usuarios' => UserModel::getPublicProfilesOfAllUsers()
+            'usuarios' => UserModel::getAllUsersForInstitucion($institucion->institucion_id)
         ));
     }
 

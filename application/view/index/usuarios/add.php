@@ -12,7 +12,7 @@
             <label>Usuario:</label>
             <select class="form-control" name="user_id">
             <?php foreach($this->usuarios as $key => $value) { ?>
-                <option value="<?php echo $value->user_id; ?>"><?php echo $value->user_name;?></option>
+                <option value="<?php echo $value->user_id; ?>"><?php echo $value->user_name;?> | <?php echo $value->rol_name;?></option>
             <?php } ?>
             </select>
         </div>

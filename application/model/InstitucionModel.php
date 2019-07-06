@@ -222,7 +222,6 @@ class InstitucionModel
         }
 
         // default return
-        Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_DELETION_FAILED'));
         return false;
     }
 }
