@@ -29,7 +29,7 @@ class IndexController extends Controller
             if (is_object($institucion)){
                 $this->View->render('index/index_four', array(
                     'institucion' => InstitucionModel::getInstitucion($institucion->institucion_id),
-                    'usuarios_institucionales' => InstitucionModel::getAllUsuariosIstitucionales($institucion->institucion_id)
+                    'usuarios_institucionales' => InstitucionModel::getAllUsuariosIstitucionalesWhereInstitucion($institucion->institucion_id)
                 ));
             }
             else{

@@ -146,7 +146,19 @@ class InstitucionModel
 
         $sql = "SELECT inst_user.institucion_id, inst_user.user_id, users.user_name, users.user_email FROM inst_user INNER JOIN users ON inst_user.user_id = users.user_id";
         $query = $database->prepare($sql);
-        $query->execute(array());
+        $query->execute();
+
+        // fetchAll() is the PDO method that gets all result rows
+        return $query->fetchAll();
+    }
+
+    public static function getAllUsuariosIstitucionalesWhereInstitucion($institucion_id)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT inst_user.institucion_id, inst_user.user_id, users.user_name, users.user_email FROM inst_user INNER JOIN users ON inst_user.user_id = users.user_id WHERE inst_user.institucion_id = :institucion_id";
+        $query = $database->prepare($sql);
+        $query->execute(array(':institucion_id'=> $institucion_id));
 
         // fetchAll() is the PDO method that gets all result rows
         return $query->fetchAll();
