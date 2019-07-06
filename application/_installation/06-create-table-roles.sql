@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `huge`.`roles` (
 
 INSERT INTO `huge`.`roles` (`rol_id`, `rol_name`) VALUES
   (1, "Invitado"),
-  (2, "Organizador"),
+  (2, "Mesa central"),
   (3, "Profesional Ecografista"),
   (4, "Jefe de institucion"),
   (5, "Vacio"),
