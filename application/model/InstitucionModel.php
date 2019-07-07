@@ -16,7 +16,7 @@ class InstitucionModel
 
         $sql = "SELECT instituciones.user_id, users.user_name, instituciones.institucion_id, instituciones.institucion_text FROM instituciones INNER JOIN users ON instituciones.user_id = users.user_id";
         $query = $database->prepare($sql);
-        $query->execute(array());
+        $query->execute();
 
         // fetchAll() is the PDO method that gets all result rows
         return $query->fetchAll();
@@ -39,7 +39,7 @@ class InstitucionModel
         return $query->fetch();
     }
 
-    public static function getInstitucionUser($user_id)
+    public static function getInstitucionJefe($user_id)
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
@@ -161,6 +161,18 @@ class InstitucionModel
         $sql = "SELECT inst_user.institucion_id, inst_user.user_id, users.user_name, users.user_email FROM inst_user INNER JOIN users ON inst_user.user_id = users.user_id WHERE inst_user.institucion_id = :institucion_id";
         $query = $database->prepare($sql);
         $query->execute(array(':institucion_id'=> $institucion_id));
+
+        // fetchAll() is the PDO method that gets all result rows
+        return $query->fetchAll();
+    }
+
+    public static function getAllInstitucionesUser($user_id)
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT inst_user.institucion_id, instituciones.institucion_text FROM inst_user INNER JOIN instituciones ON inst_user.institucion_id = instituciones.institucion_id WHERE inst_user.user_id = :user_id";
+        $query = $database->prepare($sql);
+        $query->execute(array(':user_id' => $user_id));
 
         // fetchAll() is the PDO method that gets all result rows
         return $query->fetchAll();
