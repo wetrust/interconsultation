@@ -44,7 +44,7 @@ class InterconsultasModel
             $largo = -1 * abs($largo);
             $sqlB .= substr("$clave", $largo);
             $sqlD .= "$clave";
-            if (end($datos) != $valor){
+            if (self::endKey($datos) != $clave){
                 $sqlB .= ", ";
                 $sqlD .= ", ";
             }
@@ -85,7 +85,7 @@ class InterconsultasModel
             //convertir a negativo para seleccionar de atras para adelante
             $largo = -1 * abs($largo);
             $sqlB .= substr("$clave", $largo) . " = $clave";
-            if (end($datos) != $valor){
+            if (self::endKey($datos) != $clave){
                 $sqlB .= ", ";
             }
         }
@@ -103,5 +103,11 @@ class InterconsultasModel
 
         //Session::add('feedback_negative', Text::get('FEEDBACK_NOTE_CREATION_FAILED'));
         return false;
+    }
+
+    //ayuda para comprobar que llego al ultimo elemento del arreglo
+    public static function endKey($array){
+        end($array);
+        return key($array);
     }
 }
