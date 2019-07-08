@@ -93,9 +93,27 @@ class IndexController extends Controller
     }
 
     public function solicitar_interconsulta(){
-        $datos = array(":user_id" => Session::get("user_id"), ":institucion_id" => Request::post("a"), ":solicitud_nombre" => Request::post("b"), ":solicitud_rut" => Request::post("c"), ":solicitud_telefono" => Request::post("d"), ":solicitud_fecha" => Request::post("e"), ":solicitud_eg_conocida" => Request::post("f"), ":solicitud_eco_previa" => Request::post("g"), ":solicitud_fum" => Request::post("h"), ":solicitud_egestacional" => Request::post("i"), ":solicitud_diagnostico" => Request::post("j"), ":solicitud_ciudad" => Request::post("k"), ":solicitud_lugar" => Request::post("l"));
+        $datos = array(":user_id" => Session::get("user_id"), ":institucion_id" => Request::post("a"), ":solicitud_nombre" => Request::post("b"), ":solicitud_rut" => Request::post("c"), ":solicitud_telefono" => Request::post("d"), ":solicitud_fecha" => Request::post("e"), ":solicitud_eg_conocida" => Request::post("f"), ":solicitud_eco_previa" => Request::post("g"), ":solicitud_fum" => Request::post("h"), ":solicitud_egestacional" => Request::post("i"), ":solicitud_diagnostico" => Request::post("j"), ":solicitud_ciudad" => Request::post("k"), ":solicitud_lugar" => Request::post("l"), ":solicitud_estado" => 0);
         $respuesta = new stdClass();
         $respuesta->result = InterconsultasModel::createInterconsulta($datos);
+        $this->View->renderJSON($respuesta);
+    }
+
+    public function interconsulta($solicitud_id = null){
+        $this->View->renderJSON(InterconsultasModel::getInterconsulta($solicitud_id)); 
+    }
+
+    public function interconsulta_change(){
+        $datos = array(":solicitud_id" => Request::post("b"), ":solicitud_estado" => Request::post("a"));
+
+        if ($datos[":solicitud_estado"] == 1){
+            $datos[":solicitud_agenda"] = Request::post("c");
+        }else if ($datos[":solicitud_estado"] == 2){
+            $datos[":solicitud_comentario"] = Request::post("c");
+        }
+
+        $respuesta = new stdClass();
+        $respuesta->result = InterconsultasModel::updateInterconsulta($datos);
         $this->View->renderJSON($respuesta);
     }
 }

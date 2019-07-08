@@ -50,7 +50,7 @@
                         <td><?= htmlentities($value->solicitud_lugar); ?></td>
                         <td><?= htmlentities($value->solicitud_diagnostico); ?></td>
                         <td><?= htmlentities($value->solicitud_fecha); ?></td>
-                        <td><button class="btn btn-primary">Ver</a></td>
+                        <td><button class="btn btn-primary interconsulta" data-id="<?= htmlentities($value->solicitud_id); ?>">Ver</a></td>
                     </tr>
                     <?php } ?>
                         <?php } ?>
@@ -68,7 +68,7 @@
 <script src="<?php echo Config::get('URL'); ?>/js/jquery.rut.chileno.min.js"></script>
 <script>
 $(document).ready(function(){
-$("#interconsulta\\.fum").on("change", function(){
+    $("#interconsulta\\.fum").on("change", function(){
 		var FExamen, FUM, EdadGestacional;
 		var undia = 1000 * 60 * 60 * 24;
 		var unasemana = undia * 7;
@@ -218,5 +218,101 @@ $("#interconsulta\\.fum").on("change", function(){
 	var month = ("0" + (now.getMonth() + 1)).slice(-2);
 	var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
 	$("#interconsulta\\.fecha").val(today);
+
+    $("button.interconsulta").on("click", function(){
+        var id = $(this).data("id");
+
+        createCarcasaInterconsultaModal();
+        createInterconsultaModal(id); 
+    });
 });
+
+function createInterconsultaModal(id){
+    
+    $.get("<?php echo Config::get('URL'); ?>index/interconsulta/" + id).done(function(data){
+        $("#contenedorInterconsulta").empty().append('<input type="hidden" id="a"><div class="col-4"> <label><small>Nombre del paciente:</small></label> <p id="b"></p></div><div class="col-4"> <label><small>RUT del paciente:</small></label> <p id="c"></p></div><div class="col-4"> <label><small>Teléfono:</small></label> <p id="d"></p></div><div class="col-4"> <label><small>Fecha de solicitud:</small></label> <p id="e"></p></div><div class="col-4"> <label><small>FUM operacional</small></label> <p id="f"></p></div><div class="col-4"> <label><small>Edad Gestacional</small></label> <p id="g"></p></div><div class="col-4 form-group"> <label><small>Ege conocida precozmente</small></label> <p id="h"></p></div><div class="col-4 form-group"> <label><small>Ecografía previa de crecimiento</small></label> <p id="i"></p></div><div class="col-4 form-group"> <label><small>Diagnóstico de referencia</small></label> <p id="j"></p></div><div class="col-4 form-group"> <label><small>Ciudad procedencia de la paciente</small></label> <p id="k"></p></div><div class="col-4 form-group"> <label><small>Lugar de control prenatal</small></label> <p id="l"></p></div><div class="col-4 form-group"> <label><small>Nombre del profesional referente:</small></label> <p id="ll"></p></div><div class="col-4 form-group"> <label><small>Email (de trabajo):</small></label> <p id="m"></p></div><div class="col-8 form-group"> <label><small>Estado de interconsulta:</small></label> <p id="n"></p></div></div>');
+            $("#a").val(data.solicitud_id).data("estado", data.solicitud_estado);
+            $("#b").html('<strong class="text-primary">'+data.solicitud_nombre+'</strong>');
+            $("#c").html('<strong>'+data.solicitud_rut+'</strong>');
+            $("#d").html('<strong class="text-primary">'+data.solicitud_telefono+'</strong>');
+            $("#e").html('<strong class="text-primary">'+data.solicitud_fecha+'</strong>');
+            $("#f").html('<strong class="text-primary">'+data.solicitud_fum+'</strong>');
+            $("#g").html('<strong class="text-primary">'+data.solicitud_egestacional+'</strong>');
+            data.solicitud_eg_conocida = (data.solicitud_eco_previa == 1) ? "Si" : "No";
+            data.solicitud_eco_previa = (data.solicitud_eco_previa == 1) ? "Si" : "No";
+            $("#h").html('<strong>'+data.solicitud_eg_conocida+'</strong>');
+            $("#i").html('<strong>'+data.solicitud_eco_previa+'</strong>');
+            $("#j").html('<strong>'+data.solicitud_diagnostico+'</strong>');
+            $("#k").html('<strong>'+data.solicitud_ciudad+'</strong>');
+            $("#l").html('<strong>'+data.solicitud_lugar+'</strong>');
+            $("#ll").html('<strong>'+data.user_name+'</strong>');
+            $("#m").html('<strong>'+data.user_email+'</strong>');
+            data.solicitud_estado = (data.solicitud_estado == 1) ? "Agendada, en espera de ser confirmada" : (data.solicitud_estado == 2) ? "Confirmada, en espera de ecografía" : "En espera, necesita ser agendada";
+            $("#n").html('<strong class="text-primary">'+data.solicitud_estado+'</strong>');
+        });
+}
+function createCarcasaInterconsultaModal(){
+    var footerModal = '</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button></div></div></div></div>';
+    $('body').append('<div class="modal" tabindex="-1" role="dialog" id="mensaje.dialogo"> <div class="modal-dialog modal-lg" role="document"> <div class="modal-content"> <div class="modal-header"> <h5 class="modal-title">Interconsulta</h5></div><div class="modal-body"><div class="row" id="contenedorInterconsulta"><div class="progress col-12 my-4"><div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"><strong>CARGANDO</strong></div></div></div><div class="row"> <div class="col-4"> <button class="btn btn-primary" id="estado">Cambiar estado</button> </div></div>'+ footerModal);
+
+    $("#estado").on("click", function(e){
+        var footerModal = '</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button></div></div></div></div>';
+        $('body').append('<div class="modal" tabindex="-1" role="dialog" id="mensaje.estado"> <div class="modal-dialog modal-lg" role="document"> <div class="modal-content"> <div class="modal-header"> <h5 class="modal-title">Cambiar estado</h5></div><div class="modal-body"> <div class="row"> <div class="col-4 form-group"> <label><small>Cambiar estado:</small></label> <select class="form-control" id="x"> <option value="1">Agendar fecha de atención</option> <option value="2">Confirmar interconsulta</option> <option value="3">Cancelar interconsulta</option> </select> </div><div class="col-4 form-group" id="w"> <label><small>Fecha:</small></label> <input type="date" class="form-control" id="y"> <input type="text" class="form-control d-none" id="z"> </div></div><div class="row"> <div class="col-4"> <button class="btn btn-primary" id="cambiar">Cambiar estado</button> </div></div>'+ footerModal);
+            
+                $("#x").on("change", function(){
+                    var value = +$(this).val();
+
+                    if (value ==1){
+                        $("#w").removeClass("d-none");
+                        $("#y").removeClass("d-none").parent().children("label").html("<small>Fecha</small>");
+                        $("#z").addClass("d-none");
+                    }
+                    else if (value ==2){
+                        $("#w").removeClass("d-none");
+                        $("#y").addClass("d-none").parent().children("label").html("<small>Comentario</small>");
+                        $("#z").removeClass("d-none");
+                    }
+                    else if (value ==3){
+                        $("#w").addClass("d-none");
+                    }
+                });
+
+                $("#cambiar").on("click", function(e){
+                    var a = +$("#x").val();
+                    var b = $("#a").val();
+                    var c = (a == 1) ? $("#y").val() : (a == 2) ? $("#z").val() : "";
+
+                    var data = {a:a,b:b,c:c};
+                    var footerModal = '</div><div class="modal-footer"></div></div></div></div>';
+                    $('body').append('<div class="modal" tabindex="-1" role="dialog" id="mensaje.send"> <div class="modal-dialog modal-lg" role="document"> <div class="modal-content"> <div class="modal-header"> <h5 class="modal-title">Enviando datos</h5></div><div class="modal-body">'+ footerModal);
+                    $('#mensaje\\.send').modal("show").on('hidden.bs.modal', function (e) {
+                        $('#mensaje\\.send').remove();
+                    });
+                    $.post("<?php echo Config::get('URL'); ?>index/interconsulta_change/", data).done(function(result){
+                        if (result.result == true){
+                            $('#mensaje\\.send').modal("hide").remove();
+                            $('#mensaje\\.estado').modal("hide").remove();
+
+                            if (data.a == 3){
+                                location.reload();
+                            }
+                            else{
+                                createInterconsultaModal(data.b);
+                            }
+                        }
+                        else{
+                            $('#mensaje\\.send').children("div.modal-footer").append('<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>');
+                        }
+                    });
+                });
+
+                $('#mensaje\\.estado').modal("show").on('hidden.bs.modal', function (e) {
+                    $('#mensaje\\.estado').remove();
+                });
+            });
+
+    $('#mensaje\\.dialogo').modal("show").on('hidden.bs.modal', function (e) {
+        $('#mensaje\\.dialogo').remove();
+    });
+}
 </script>

@@ -13,5 +13,8 @@ CREATE TABLE IF NOT EXISTS `huge`.`solicitudes` (
  `solicitud_diagnostico` text NOT NULL,
  `solicitud_ciudad` text NOT NULL,
  `solicitud_lugar` text NOT NULL,
+ `solicitud_estado` int(1) unsigned NOT NULL,
+ `solicitud_agenda` date NULL,
+ `solicitud_comentario` text NULL,
  PRIMARY KEY (`solicitud_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='solicitudes de interconsulta';

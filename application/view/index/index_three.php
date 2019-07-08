@@ -64,3 +64,7 @@
         <div class="alert alert-info mt-2" role="alert">Usted no pertenece a una institución, informe al jefe de su institución.</div>
     <?php } ?>
 </div>
+<script>
+$(document).ready(function(){
+});
+</script>
