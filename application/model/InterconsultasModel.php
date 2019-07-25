@@ -7,7 +7,18 @@ class InterconsultasModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "SELECT * FROM solicitudes WHERE solicitud_estado != 3";
+        $sql = "SELECT * FROM solicitudes WHERE solicitud_estado NOT IN (3,4)";
+        $query = $database->prepare($sql);
+        $query->execute();
+
+        return $query->fetchAll();
+    }
+
+    public static function getAllInterconsultasEcografista()
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT * FROM solicitudes WHERE solicitud_estado NOT IN (1,3)";
         $query = $database->prepare($sql);
         $query->execute();
 

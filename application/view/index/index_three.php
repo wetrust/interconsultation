@@ -38,6 +38,18 @@
                             </tr>
                         </thead>
                         <tbody>
+                        <?php if ($this->interconsultas) { ?>
+                        <?php foreach($this->interconsultas as $key => $value) { ?>
+                            <tr>
+                                <td><?= htmlentities($value->solicitud_nombre); ?></td>
+                                <td><?= htmlentities($value->solicitud_telefono); ?></td>
+                                <td><?= htmlentities($value->solicitud_ciudad); ?></td>
+                                <td><?= htmlentities($value->solicitud_diagnostico); ?></td>
+                                <td><button class="btn btn-primary descartar" data-user="<?= htmlentities($value->user_id); ?>">Ir a exámen</a></td>
+                            </tr>
+                        <?php }} else { ?>
+                            <div class="alert alert-info mt-2" role="alert">No tiene usuarios institucionales.</div>
+                        <?php } ?>
                         </tbody>
                     </table>
                 </div>

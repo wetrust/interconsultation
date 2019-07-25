@@ -238,7 +238,7 @@ function createInterconsultaModal(id){
             $("#e").html('<strong class="text-primary">'+data.solicitud_fecha+'</strong>');
             $("#f").html('<strong class="text-primary">'+data.solicitud_fum+'</strong>');
             $("#g").html('<strong class="text-primary">'+data.solicitud_egestacional+'</strong>');
-            data.solicitud_eg_conocida = (data.solicitud_eco_previa == 1) ? "Si" : "No";
+            data.solicitud_eg_conocida = (data.solicitud_eg_conocida == 1) ? "Si" : "No";
             data.solicitud_eco_previa = (data.solicitud_eco_previa == 1) ? "Si" : "No";
             $("#h").html('<strong>'+data.solicitud_eg_conocida+'</strong>');
             $("#i").html('<strong>'+data.solicitud_eco_previa+'</strong>');
