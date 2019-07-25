@@ -231,8 +231,8 @@ function createInterconsultaModal(id){
     
     $.get("<?php echo Config::get('URL'); ?>index/interconsulta/" + id).done(function(data){
         $("#contenedorInterconsulta").empty().append('<input type="hidden" id="a"><div class="col-4"> <label><small>Nombre del paciente:</small></label> <p id="b"></p></div><div class="col-4"> <label><small>RUT del paciente:</small></label> <p id="c"></p></div><div class="col-4"> <label><small>Teléfono:</small></label> <p id="d"></p></div><div class="col-4"> <label><small>Fecha de solicitud:</small></label> <p id="e"></p></div><div class="col-4"> <label><small>FUM operacional</small></label> <p id="f"></p></div><div class="col-4"> <label><small>Edad Gestacional</small></label> <p id="g"></p></div><div class="col-4 form-group"> <label><small>Ege conocida precozmente</small></label> <p id="h"></p></div><div class="col-4 form-group"> <label><small>Ecografía previa de crecimiento</small></label> <p id="i"></p></div><div class="col-4 form-group"> <label><small>Diagnóstico de referencia</small></label> <p id="j"></p></div><div class="col-4 form-group"> <label><small>Ciudad procedencia de la paciente</small></label> <p id="k"></p></div><div class="col-4 form-group"> <label><small>Lugar de control prenatal</small></label> <p id="l"></p></div><div class="col-4 form-group"> <label><small>Nombre del profesional referente:</small></label> <p id="ll"></p></div><div class="col-4 form-group"> <label><small>Email (de trabajo):</small></label> <p id="m"></p></div><div class="col-8 form-group"> <label><small>Estado de interconsulta:</small></label> <p id="n"></p></div></div>');
-            $("#a").val(data.solicitud_id).data("estado", data.solicitud_estado);
-            $("#b").html('<strong class="text-primary">'+data.solicitud_nombre+'</strong>');
+        $("#a").val(data.solicitud_id).data("estado", data.solicitud_estado);
+        $("#b").html('<strong class="text-primary">'+data.solicitud_nombre+'</strong>');
             $("#c").html('<strong>'+data.solicitud_rut+'</strong>');
             $("#d").html('<strong class="text-primary">'+data.solicitud_telefono+'</strong>');
             $("#e").html('<strong class="text-primary">'+data.solicitud_fecha+'</strong>');
@@ -249,7 +249,7 @@ function createInterconsultaModal(id){
             $("#m").html('<strong>'+data.user_email+'</strong>');
             data.solicitud_estado = (data.solicitud_estado == 1) ? "Agendada, en espera de ser confirmada" : (data.solicitud_estado == 2) ? "Confirmada, en espera de ecografía" : "En espera, necesita ser agendada";
             $("#n").html('<strong class="text-primary">'+data.solicitud_estado+'</strong>');
-        });
+    });
 }
 function createCarcasaInterconsultaModal(){
     var footerModal = '</div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button></div></div></div></div>';

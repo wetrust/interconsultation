@@ -18,7 +18,18 @@ class InterconsultasModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "SELECT * FROM solicitudes WHERE solicitud_estado NOT IN (1,3)";
+        $sql = "SELECT * FROM solicitudes WHERE solicitud_estado NOT IN (1,3,4)";
+        $query = $database->prepare($sql);
+        $query->execute();
+
+        return $query->fetchAll();
+    }
+
+    public static function getAllInterconsultasResueltas()
+    {
+        $database = DatabaseFactory::getFactory()->getConnection();
+
+        $sql = "SELECT * FROM solicitudes WHERE solicitud_estado NOT IN (1,2,3)";
         $query = $database->prepare($sql);
         $query->execute();
 

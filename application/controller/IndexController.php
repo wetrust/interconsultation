@@ -44,7 +44,8 @@ class IndexController extends Controller
             if (is_array($instituciones)){
                 $this->View->render('index/index_three', array(
                     'instituciones' => $instituciones,
-                    'interconsultas' => InterconsultasModel::getAllInterconsultasEcografista()
+                    'interconsultas' => InterconsultasModel::getAllInterconsultasEcografista(),
+                    'resueltas' => interconsultasModel::getAllInterconsultasResueltas()
                 ));
             }
             else{
