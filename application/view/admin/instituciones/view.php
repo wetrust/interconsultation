@@ -29,6 +29,8 @@
             <input class="form-control" id="busqueda" type="text" placeholder="Buscar..">
         </div>
     </div>
+    <div class="row">
+        <div class="col-9">
         <?php if ($this->usuarios_institucionales) { ?>
             <table class="table table-bordered mt-2">
                 <thead class="thead-dark">
@@ -53,6 +55,13 @@
         <?php } else { ?>
             <div class="alert alert-info mt-2" role="alert">No tiene usuarios institucionales.</div>
         <?php } ?>
+        </div>
+        <div class="col">
+            <p><strong>Jefe de unidad ecográfica</strong> Su rol es administrar una institución, designar profesionales ecografistas y usuarios de mesa central.</p>
+            <p><strong>Profesional Ecografista</strong> Su rol es realizar exámen ecográfico, generar informes.</p>
+            <p><strong>Mesa central</strong> Su rol es solicitar, agendar, autorizar y rechazar interconsultas ecográficas.</p>
+        </div>
+    </div>
 </div>
 <script>
 $(document).ready(function(){
