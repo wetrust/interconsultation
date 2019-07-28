@@ -58,11 +58,11 @@
         </div>
         <div class="col">
             <div class="card mt-2">
-            <div class="card-body">
-            <p><strong>Jefe de unidad ecográfica</strong> Su rol es administrar una institución, designar profesionales ecografistas y usuarios de mesa central.</p>
-            <p><strong>Profesional Ecografista</strong> Su rol es realizar exámen ecográfico, generar informes.</p>
-            <p><strong>Mesa central</strong> Su rol es solicitar, agendar, autorizar y rechazar interconsultas ecográficas.</p>
-            </div>
+                <div class="card-body">
+                    <p><strong>Encargado de unidad ecográfica</strong> Su rol es administrar una institución, designar profesionales ecografistas y usuarios de mesa central.</p>
+                    <p><strong>Profesional Ecografista</strong> Su rol es realizar exámen ecográfico, generar informes.</p>
+                    <p><strong>Mesa central</strong> Su rol es solicitar, agendar, autorizar y rechazar interconsultas ecográficas.</p>
+                </div>
             </div>
         </div>
     </div>
