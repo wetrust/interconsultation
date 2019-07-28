@@ -35,6 +35,7 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Correo</th>
+                        <th>Rol</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -43,6 +44,7 @@
                     <tr>
                         <td><?= htmlentities($value->user_name); ?></td>
                         <td><?= htmlentities($value->user_email); ?></td>
+                        <td><?= htmlentities($value->rol_name); ?></td>
                         <td><button class="btn btn-danger descartar" data-user="<?= htmlentities($value->user_id); ?>">Desvincular</button></td>
                     </tr>
                     <?php } ?>
