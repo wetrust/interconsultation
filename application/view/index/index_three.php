@@ -1,7 +1,5 @@
 <style>
-.g-verde{
-    background-color: #009688;
-}
+.g-verde{background-color: #009688;}
 </style>
 <div class="container">
     <h1>Bienvenido Profesional Ecografista</h1>
