@@ -146,7 +146,7 @@ class InstitucionModel
     {
         $database = DatabaseFactory::getFactory()->getConnection();
 
-        $sql = "SELECT inst_user.institucion_id, inst_user.user_id, users.user_name, users.user_email FROM inst_user INNER JOIN users ON inst_user.user_id = users.user_id";
+        $sql = "SELECT inst_user.institucion_id, inst_user.user_id, users.user_name, users.user_email, roles.rol_name FROM inst_user INNER JOIN users ON inst_user.user_id = users.user_id INNER JOIN roles ON users.user_account_type = roles.rol_id";
         $query = $database->prepare($sql);
         $query->execute();
 
